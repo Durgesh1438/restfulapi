@@ -1,0 +1,188 @@
+openapi: 3.0.0
+info:
+  title: Your API Title
+  description: API documentation detailing endpoints, request/response formats, and authentication mechanism.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+paths:
+  /users/login:
+    post:
+      summary: User Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+        '401':
+          description: Invalid username or password
+  /users/register:
+    post:
+      summary: Register a New User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User created successfully
+        '500':
+          description: Error creating user
+  /users/profile:
+    get:
+      summary: Get User Profile
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+        '401':
+          description: Unauthorized
+    put:
+      summary: Update User Profile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: User profile updated successfully
+        '500':
+          description: Error updating user profile
+    delete:
+      summary: Delete User Profile
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: User profile deleted successfully
+        '500':
+          description: Error deleting user profile
+  /users/admin:
+    get:
+      summary: Get All Users (Admin Only)
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+        '403':
+          description: Access denied. You are not authorized to perform this action.
+  /posts:
+    post:
+      summary: Create a New Post
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+      responses:
+        '201':
+          description: Post created successfully
+        '500':
+          description: Error creating post
+    get:
+      summary: Get All Posts
+      responses:
+        '200':
+          description: Successful operation
+        '500':
+          description: Error fetching posts
+  /posts/{id}:
+    get:
+      summary: Get Post by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+        '404':
+          description: Post not found
+        '500':
+          description: Error fetching post
+    put:
+      summary: Update Post by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+      responses:
+        '200':
+          description: Post updated successfully
+        '404':
+          description: Post not found
+        '500':
+          description: Error updating post
+    delete:
+      summary: Delete Post by ID
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Post deleted successfully
+        '500':
+          description: Error deleting post
+securitySchemes:
+  BearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
+
